@@ -32,3 +32,47 @@ JOIN albums ON tracks.AlbumId = albums.AlbumId
 JOIN artists ON albums.ArtistId = artists.ArtistId
 WHERE genres.Name = "Rock" 
 
+-- 2. Find the Playlist with the most / least songs (will need a group by  and count )
+
+SELECT playlists.Name,
+  count(*) AS SongCount
+FROM playlists
+JOIN playlist_track on playlist_track.PlaylistId = playlists.PlaylistId
+GROUP BY playlist.Name
+ORDER BY SongCount DESC
+LIMIT 1;
+
+SELECT playlists.Name,
+  count(*) AS SongCount
+FROM playlists
+JOIN playlist_track on playlist_track.PlaylistId = playlists.PlaylistId
+GROUP BY playlist.Name
+ORDER BY SongCount ASC
+LIMIT 1;
+
+-- 3. Find the total for a given invoice (will need a sum)
+SELECT invoices.InvoiceId AS Invoice_ID,
+'R' || invoices.Total AS Total 
+FROM invoices 
+WHERE invoices.InvoiceId = 1;
+
+-- 4. Find all the playlists containing a given genre 
+-- SELECT * FROM genres
+SELECT DISTINCT (playlists.Name) FROM genres
+JOIN playlists ON playlist_track.PlaylistId = playlists.PlaylistId
+JOIN playlist_track ON tracks.TrackId = playlist_track.TrackId
+JOIN tracks ON genres.GenreId = tracks.GenreId
+WHERE genres.Name = "Rock" 
+
+-- 5. Find the biggest/smallest invoice amounts (needs group by)
+SELECT InvoiceId, Min(Total) FROM invoices;
+SELECT InvoiceId, Max(Total) FROM invoices;
+
+-- 6. Find the artist with the most/least songs (needs group by) 
+SELECT artists.Name, count(*) AS TrackCount
+FROM artists
+JOIN albums ON albums.ArtistId = artists.ArtistId
+JOIN tracks ON tracks.AlbumId = albums.AlbumId
+GROUP BY artists.Name
+ORDER BY TrackCount DESC
+LIMIT 5
